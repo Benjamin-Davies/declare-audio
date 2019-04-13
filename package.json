@@ -1,0 +1,16 @@
+{
+  "name": "declare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/declare/index.ts",
+  "scripts": {
+    "start": "parcel src/test/index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.4.0",
+    "parcel": "^1.12.3",
+    "typescript": "^3.4.3"
+  }
+}
