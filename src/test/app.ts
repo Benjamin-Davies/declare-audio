@@ -10,7 +10,7 @@ $('#play').click(() => {
   if (playing) {
     ctx.unmuteAll();
   } else {
-    ctx.play(gain(0.1, osc(440, 'sine'), osc(550, 'sine')));
+    ctx.play(gain(0.1, ...[2, 4, 5, 6, 8].map(n => osc(110 * n, 'sine'))));
     playing = true;
   }
 });
