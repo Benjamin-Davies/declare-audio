@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import { context } from '../declare/core';
-import { gain, osc } from '../declare/nodes';
+import { context } from '../src/declare/core';
+import { gain, osc } from '../src/declare/nodes';
 
 const ctx = context();
 let playing = false;

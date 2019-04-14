@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/declare/index.ts",
   "scripts": {
-    "start": "parcel src/test/index.html"
+    "start": "parcel examples/index.html"
   },
   "author": "",
   "license": "ISC",
