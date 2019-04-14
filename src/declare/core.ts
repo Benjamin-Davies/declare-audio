@@ -22,11 +22,11 @@ export function context(): DeclareContext {
   masterGain.connect(audioContext.destination);
 
   return {
-    play,
-    muteAll,
-    unmuteAll,
     audioContext,
-    masterGain
+    masterGain,
+    muteAll,
+    play,
+    unmuteAll
   };
 }
 

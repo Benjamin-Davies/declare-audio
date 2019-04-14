@@ -4,13 +4,15 @@
   "description": "",
   "main": "src/declare/index.ts",
   "scripts": {
-    "start": "parcel examples/index.html"
+    "start": "parcel examples/index.html",
+    "lint": "tslint -c tslint.json src/**/*.ts --fix"
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "jquery": "^3.4.0",
     "parcel": "^1.12.3",
+    "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   }
 }
