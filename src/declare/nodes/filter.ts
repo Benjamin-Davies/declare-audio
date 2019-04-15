@@ -1,4 +1,5 @@
-import { DeclareContext, DeclareNode, EffectNode } from '../core';
+import { DeclareNode, EffectNode } from '.';
+import { DeclareContext } from '../core';
 
 export interface Filter extends EffectNode {
   frequency: number;

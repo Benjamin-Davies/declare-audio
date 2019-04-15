@@ -1,4 +1,5 @@
-import { DeclareContext, DeclareNode } from '../core';
+import { DeclareNode } from '.';
+import { DeclareContext } from '../core';
 
 export interface Osc extends DeclareNode {
   frequency: number;

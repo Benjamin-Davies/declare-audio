@@ -7,14 +7,6 @@ export interface DeclareContext {
   unmuteAll();
 }
 
-export interface DeclareNode {
-  generate(ctx: DeclareContext): AudioNode;
-}
-
-export interface EffectNode extends DeclareNode {
-  children: DeclareNode[];
-}
-
 export function context(): DeclareContext {
   const audioContext = new AudioContext();
   const masterGain = audioContext.createGain();
