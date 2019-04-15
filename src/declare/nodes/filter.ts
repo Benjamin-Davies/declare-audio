@@ -21,6 +21,8 @@ function generate(this: Filter, ctx: DeclareContext): GainNode {
   node.frequency.value = this.frequency;
   node.gain.value = this.gain;
   node.type = this.type;
-  for (const child of this.children) { child.generate(ctx).connect(node); }
+  for (const child of this.children) {
+    child.generate(ctx).connect(node);
+  }
   return node;
 }
