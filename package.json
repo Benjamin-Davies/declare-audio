@@ -9,11 +9,12 @@
   "main": "src/declare/",
   "scripts": {
     "start": "parcel examples/index.html",
-    "lint": "tslint -c tslint.json src/**/*.ts --fix"
+    "lint": "tslint -c tslint.json src/**/*.ts examples/**/*.ts --fix"
   },
   "author": "Benjamin Davies",
   "license": "MIT",
   "devDependencies": {
+    "@types/jquery": "^3.3.29",
     "jquery": "^3.4.0",
     "parcel": "^1.12.3",
     "tslint": "^5.15.0",

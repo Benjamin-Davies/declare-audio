@@ -5,7 +5,8 @@
   "rules": {
     "quotemark": [true, "single"],
     "trailing-comma": [true, false],
-    "interface-name": false
+    "interface-name": false,
+    "arrow-parens": false
   },
   "rulesDirectory": []
 }
