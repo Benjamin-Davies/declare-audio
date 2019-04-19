@@ -3,6 +3,7 @@ export type EventListener<T> = (time: number, data: T) => void;
 
 export class EventSource<T> {
   private listeners: Array<EventListener<T>> = [];
+  private cancelListeners: Array<EventListener<void>> = [];
   private pastEvents: Array<Event<T>> = [];
 
   public listen(
@@ -18,11 +19,31 @@ export class EventSource<T> {
     return this;
   }
 
+  public onCancel(listener: EventListener<void>): EventSource<T> {
+    this.cancelListeners.push(listener);
+    return this;
+  }
+
   public trigger(time: number, data: T): EventSource<T> {
     this.pastEvents.push([time, data]);
     for (const listener of this.listeners) {
       listener(time, data);
     }
+    return this;
+  }
+
+  public cancel(time: number): EventSource<T> {
+    for (let i = this.pastEvents.length - 1; i >= 0; i++) {
+      const [t] = this.pastEvents[i];
+      if (t > time) {
+        this.pastEvents.splice(i, 1);
+      }
+    }
+
+    for (const listener of this.cancelListeners) {
+      listener(time);
+    }
+
     return this;
   }
 
