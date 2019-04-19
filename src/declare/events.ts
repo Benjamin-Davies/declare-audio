@@ -47,11 +47,27 @@ export class EventSource<T> {
     return this;
   }
 
-  public map<U>(f: (time: number, data: T) => Event<U>): EventSource<T> {
+  public map<U>(f: (time: number, data: T) => Event<U>): EventSource<U> {
     const newSource = new EventSource<U>();
-    return this.listen((time, data) => {
+    this.listen((time, data) => {
       newSource.trigger(...f(time, data));
     });
+    this.onCancel(newSource.cancel.bind(newSource));
+    return newSource;
+  }
+
+  public mapMerge<U>(
+    f: (time: number, data: T) => Array<Event<U>>
+  ): EventSource<u> {
+    const newSource = new EventSource<U>();
+    this.listen((time, data) => {
+      const events = f(time, data);
+      for (const event of events) {
+        newSource.trigger(...event);
+      }
+    });
+    this.onCancel(newSource.cancel.bind(newSource));
+    return newSource;
   }
 }
 
