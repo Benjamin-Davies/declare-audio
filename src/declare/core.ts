@@ -1,6 +1,9 @@
+import { DeclareNode } from './nodes';
+
 export interface DeclareContext {
   audioContext: AudioContext;
   masterGain: GainNode;
+  now: number;
 
   play(node: DeclareNode);
   muteAll();
@@ -18,7 +21,10 @@ export function context(): DeclareContext {
     masterGain,
     muteAll,
     play,
-    unmuteAll
+    unmuteAll,
+    get now() {
+      return audioContext.currentTime;
+    }
   };
 }
 
