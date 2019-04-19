@@ -33,7 +33,7 @@ export class EventSource<T> {
   }
 
   public cancel(time: number): EventSource<T> {
-    for (let i = this.pastEvents.length - 1; i >= 0; i++) {
+    for (let i = this.pastEvents.length - 1; i >= 0; i--) {
       const [t] = this.pastEvents[i];
       if (t > time) {
         this.pastEvents.splice(i, 1);
@@ -58,7 +58,7 @@ export class EventSource<T> {
 
   public mapMerge<U>(
     f: (time: number, data: T) => Array<Event<U>>
-  ): EventSource<u> {
+  ): EventSource<U> {
     const newSource = new EventSource<U>();
     this.listen((time, data) => {
       const events = f(time, data);
