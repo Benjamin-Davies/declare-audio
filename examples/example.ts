@@ -1,11 +1,12 @@
 import $ from 'jquery';
 
-import { context, DeclareContext } from '../src/declare/core';
+import { getContext, play } from '../src/declare/core';
 import { adsrEnvelope } from '../src/declare/envelope';
 import { EventSource } from '../src/declare/events';
-import { filter, gain, osc } from '../src/declare/nodes';
+import { DeclareNode, filter, gain, osc } from '../src/declare/nodes';
 
-let ctx: DeclareContext | null = null;
+const ctx = getContext();
+let node: DeclareNode | undefined = undefined;
 
 const oscs = [2, 4, 5, 6, 8].map(n => osc(110 * n, 'square'));
 const trigger = new EventSource<boolean>();
@@ -16,15 +17,11 @@ const demo = gain(
 
 $('#play')
   .mousedown(() => {
-    if (!ctx) {
-      ctx = context();
-      ctx.play(demo);
+    if (!node) {
+      node = play(demo);
     }
-    trigger.cancel(0).trigger(ctx.now, true);
+    trigger.cancel(0).trigger(ctx.currentTime, true);
   })
   .mouseup(() => {
-    if (!ctx) {
-      ctx = context().play(demo);
-    }
-    trigger.cancel(0).trigger(ctx.now, false);
+    trigger.cancel(0).trigger(ctx.currentTime, false);
   });
