@@ -12,7 +12,7 @@ let node: DeclareNode | undefined = undefined;
 const oscs = [2, 4, 5, 6, 8].map(n => osc(c(110 * n), 'square'));
 const trigger = new EventSource<boolean>();
 const demo = gain(
-  adsrEnvelope(0.1, 0.2, 0.3, 0.4, trigger),
+  adsrEnvelope(0.05, 0.1, 0.5, 0.2, trigger),
   filter(c(500), c(1), 'lowpass', ...oscs)
 );
 
