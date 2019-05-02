@@ -5,9 +5,9 @@ export interface DeclareContext {
   masterGain: GainNode;
   now: number;
 
-  play(node: DeclareNode);
-  muteAll();
-  unmuteAll();
+  play(node: DeclareNode): DeclareContext;
+  muteAll(): DeclareContext;
+  unmuteAll(): DeclareContext;
 }
 
 export function context(): DeclareContext {
