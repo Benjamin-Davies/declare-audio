@@ -1,13 +1,22 @@
+import { Param } from '../parameter';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Filter implements DeclareNode {
   public node: BiquadFilterNode;
+  private unbindF: () => void;
+  private unbindG: () => void;
   private children: DeclareNode[] = [];
 
-  constructor(ctx: AudioContext, frequency: number, gain: number, type: BiquadFilterType, children: Array<NodeBuilder<DeclareNode>>) {
+  constructor(
+    ctx: AudioContext,
+    frequency: Param,
+    gain: Param,
+    type: BiquadFilterType,
+    children: Array<NodeBuilder<DeclareNode>>
+  ) {
     this.node = ctx.createBiquadFilter();
-    this.node.frequency.value = frequency;
-    this.node.gain.value = gain;
+    this.unbindF = frequency.bind(this.node.frequency);
+    this.unbindG = gain.bind(this.node.gain);
     this.node.type = type;
 
     for(const c of children) {
@@ -18,6 +27,9 @@ export class Filter implements DeclareNode {
   }
 
   public destroy() {
+    this.unbindF();
+    this.unbindG();
+
     for (const child of this.children) {
       child.node.disconnect(this.node);
       child.destroy();
@@ -26,8 +38,8 @@ export class Filter implements DeclareNode {
 }
 
 export function filter(
-  frequency: number,
-  gain: number,
+  frequency: Param,
+  gain: Param,
   type: BiquadFilterType,
   ...children: Array<NodeBuilder<DeclareNode>>
 ): NodeBuilder<Filter> {
