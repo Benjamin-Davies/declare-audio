@@ -1,11 +1,11 @@
-import { DeclareNode } from './nodes';
+import { DeclareNode, NodeBuilder } from './nodes';
 
 export interface DeclareContext {
   audioContext: AudioContext;
   masterGain: GainNode;
   now: number;
 
-  play(node: DeclareNode): DeclareContext;
+  play(node: NodeBuilder<DeclareNode>): DeclareContext;
   muteAll(): DeclareContext;
   unmuteAll(): DeclareContext;
 }
@@ -28,8 +28,8 @@ export function context(): DeclareContext {
   };
 }
 
-function play(this: DeclareContext, node: DeclareNode) {
-  node.generate(this).connect(this.masterGain);
+function play(this: DeclareContext, node: NodeBuilder<DeclareNode>) {
+  node(this.audioContext).node.connect(this.masterGain);
   this.unmuteAll();
   return this;
 }

@@ -1,4 +1,4 @@
-import { Event, EventSource, once } from './events';
+import { Event, EventSource } from './events';
 
 export function adsrEnvelope(
   attack: number,
