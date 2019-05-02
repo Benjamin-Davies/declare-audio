@@ -30,8 +30,8 @@ export function context(): DeclareContext {
 
 function play(this: DeclareContext, node: DeclareNode) {
   node.generate(this).connect(this.masterGain);
-
   this.unmuteAll();
+  return this;
 }
 
 const muteDelay = 0.01;
@@ -41,6 +41,7 @@ function muteAll(this: DeclareContext) {
     0,
     this.audioContext.currentTime + muteDelay
   );
+  return this;
 }
 
 function unmuteAll(this: DeclareContext) {
@@ -48,4 +49,5 @@ function unmuteAll(this: DeclareContext) {
     1,
     this.audioContext.currentTime + muteDelay
   );
+  return this;
 }
