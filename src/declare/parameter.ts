@@ -13,6 +13,8 @@ export class ConstantParam implements Param {
 
   public bind(param: AudioParam) {
     param.value = this.value;
+    // This function can be empty because we don't need to unbind anything
+    // tslint:disable-next-line:no-empty
     return () => {};
   }
 }
