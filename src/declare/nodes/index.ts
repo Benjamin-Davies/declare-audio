@@ -1,16 +1,14 @@
-import { DeclareContext } from '../core';
 import { EventSource } from '../events';
 
 export { filter } from './filter';
 export { gain } from './gain';
 export { osc } from './oscillator';
 
-export interface DeclareNode {
-  generate(ctx: DeclareContext): AudioNode;
-}
+export type NodeBuilder<T extends DeclareNode> = (ctx: AudioContext) => T;
 
-export interface EffectNode extends DeclareNode {
-  children: DeclareNode[];
+export interface DeclareNode {
+  node: AudioNode;
+  destroy(): void;
 }
 
 export type DeclareParam = number | EventSource<number>;

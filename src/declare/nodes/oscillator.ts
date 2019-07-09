@@ -1,20 +1,18 @@
-import { DeclareNode } from '.';
-import { DeclareContext } from '../core';
+import { DeclareNode, NodeBuilder } from '.';
 
-export interface Osc extends DeclareNode {
-  frequency: number;
-  type: OscillatorType;
-  generate(ctx: DeclareContext): OscillatorNode;
+export class Osc implements DeclareNode {
+  public node: OscillatorNode;
+
+  constructor(ctx: AudioContext, frequency: number, type: OscillatorType) {
+    this.node = ctx.createOscillator();
+    this.node.frequency.value = frequency;
+    this.node.type = type;
+    this.node.start();
+  }
+
+  public destroy() { }
 }
 
-export function osc(frequency: number, type: OscillatorType): Osc {
-  return { frequency, type, generate };
-}
-
-function generate(this: Osc, ctx: DeclareContext): OscillatorNode {
-  const node = ctx.audioContext.createOscillator();
-  node.frequency.value = this.frequency;
-  node.type = this.type;
-  node.start();
-  return node;
+export function osc(frequency: number, type: OscillatorType): NodeBuilder<Osc> {
+  return ctx => new Osc(ctx, frequency, type);
 }

@@ -1,9 +1,23 @@
-import { DeclareNode, DeclareParam, EffectNode, useParam } from '.';
-import { DeclareContext } from '../core';
+import { DeclareNode, DeclareParam, NodeBuilder, useParam } from '.';
 
-export interface Gain extends EffectNode {
-  gain: DeclareParam;
-  generate(ctx: DeclareContext): GainNode;
+export class Gain implements DeclareNode {
+  public node: GainNode;
+
+  private children: DeclareNode[] = [];
+
+  // tslint:disable-next-line: no-shadowed-variable
+  constructor(ctx: AudioContext, gain: DeclareParam, children: Array<NodeBuilder<DeclareNode>>) {
+    this.node = ctx.createGain();
+    this.node.gain.value = gain;
+
+    for (const c of children) {
+      const child = c(ctx);
+      this.children.push(child);
+      child.node.connect(this.node);
+    }
+  }
+
+  
 }
 
 // tslint:disable-next-line: no-shadowed-variable
