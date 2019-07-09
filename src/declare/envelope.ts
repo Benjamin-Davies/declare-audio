@@ -1,4 +1,5 @@
-import { Event, EventSource, once } from './events';
+import { LinearParam } from './parameter';
+import { Event, EventSource } from './events';
 
 export function adsrEnvelope(
   attack: number,
@@ -6,8 +7,8 @@ export function adsrEnvelope(
   sustain: number,
   release: number,
   trigger: EventSource<boolean>
-): EventSource<number> {
-  return trigger
+): LinearParam {
+  return new LinearParam(trigger
     .mapMerge((time, down) => {
       const events: Array<Event<number>> = [];
       let t = time;
@@ -24,5 +25,5 @@ export function adsrEnvelope(
       }
       return events;
     })
-    .trigger(0, 0);
+    .trigger(0, 0));
 }

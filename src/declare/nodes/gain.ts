@@ -1,14 +1,15 @@
-import { DeclareNode, DeclareParam, NodeBuilder, useParam } from '.';
+import { Param } from '../parameter';
+import { DeclareNode, NodeBuilder } from '.';
 
 export class Gain implements DeclareNode {
   public node: GainNode;
-
+  private unbindG: () => void;
   private children: DeclareNode[] = [];
 
   // tslint:disable-next-line: no-shadowed-variable
-  constructor(ctx: AudioContext, gain: DeclareParam, children: Array<NodeBuilder<DeclareNode>>) {
+  constructor(ctx: AudioContext, gain: Param, children: Array<NodeBuilder<DeclareNode>>) {
     this.node = ctx.createGain();
-    this.node.gain.value = gain;
+    this.unbindG = gain.bind(this.node.gain);
 
     for (const c of children) {
       const child = c(ctx);
@@ -17,19 +18,17 @@ export class Gain implements DeclareNode {
     }
   }
 
-  
+  public destroy() {
+    this.unbindG();
+
+    for (const child of this.children) {
+      child.node.disconnect(this.node);
+      child.destroy();
+    }
+  }
 }
 
 // tslint:disable-next-line: no-shadowed-variable
-export function gain(gain: DeclareParam, ...children: DeclareNode[]): Gain {
-  return { gain, children, generate };
-}
-
-function generate(this: Gain, ctx: DeclareContext): GainNode {
-  const node = ctx.audioContext.createGain();
-  useParam(this.gain, node.gain);
-  for (const child of this.children) {
-    child.generate(ctx).connect(node);
-  }
-  return node;
+export function gain(gain: Param, ...children: Array<NodeBuilder<DeclareNode>>): NodeBuilder<Gain> {
+  return ctx => new Gain(ctx, gain, children);
 }

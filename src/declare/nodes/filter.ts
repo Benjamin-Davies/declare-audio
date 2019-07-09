@@ -1,29 +1,47 @@
-import { DeclareNode, EffectNode } from '.';
-import { DeclareContext } from '../core';
+import { Param } from '../parameter';
+import { DeclareNode, NodeBuilder } from '.';
 
-export interface Filter extends EffectNode {
-  frequency: number;
-  gain: number;
-  type: BiquadFilterType;
-  generate(ctx: DeclareContext): GainNode;
+export class Filter implements DeclareNode {
+  public node: BiquadFilterNode;
+  private unbindF: () => void;
+  private unbindG: () => void;
+  private children: DeclareNode[] = [];
+
+  constructor(
+    ctx: AudioContext,
+    frequency: Param,
+    gain: Param,
+    type: BiquadFilterType,
+    children: Array<NodeBuilder<DeclareNode>>
+  ) {
+    this.node = ctx.createBiquadFilter();
+    this.unbindF = frequency.bind(this.node.frequency);
+    this.unbindG = gain.bind(this.node.gain);
+    this.node.type = type;
+
+    for(const c of children) {
+      const child = c(ctx);
+      this.children.push(child);
+      child.node.connect(this.node);
+    }
+  }
+
+  public destroy() {
+    this.unbindF();
+    this.unbindG();
+
+    for (const child of this.children) {
+      child.node.disconnect(this.node);
+      child.destroy();
+    }
+  }
 }
 
 export function filter(
-  frequency: number,
-  gain: number,
+  frequency: Param,
+  gain: Param,
   type: BiquadFilterType,
-  ...children: DeclareNode[]
-): Filter {
-  return { frequency, gain, type, children, generate };
-}
-
-function generate(this: Filter, ctx: DeclareContext): GainNode {
-  const node = ctx.audioContext.createBiquadFilter();
-  node.frequency.value = this.frequency;
-  node.gain.value = this.gain;
-  node.type = this.type;
-  for (const child of this.children) {
-    child.generate(ctx).connect(node);
-  }
-  return node;
+  ...children: Array<NodeBuilder<DeclareNode>>
+): NodeBuilder<Filter> {
+  return ctx => new Filter(ctx, frequency, gain, type, children);
 }

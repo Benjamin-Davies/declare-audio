@@ -9,19 +9,21 @@ export class EventSource<T> {
   public listen(
     listener: EventListener<T>,
     includePast: boolean = true
-  ): EventSource<T> {
+  ): () => void {
     if (includePast) {
       for (const event of this.pastEvents) {
         listener(...event);
       }
     }
+    const i = this.listeners.length;
     this.listeners.push(listener);
-    return this;
+    return () => this.listeners.splice(i, 1);
   }
 
-  public onCancel(listener: EventListener<void>): EventSource<T> {
+  public onCancel(listener: EventListener<void>): () => void {
+    const i = this.cancelListeners.length;
     this.cancelListeners.push(listener);
-    return this;
+    return () => this.cancelListeners.splice(i, 1);
   }
 
   public trigger(time: number, data: T): EventSource<T> {
