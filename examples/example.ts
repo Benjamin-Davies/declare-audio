@@ -7,7 +7,7 @@ import { DeclareNode, filter, gain, osc } from '../src/declare/nodes';
 import { constant as c } from '../src/declare/parameter';
 
 const ctx = getContext();
-let node: DeclareNode | undefined = undefined;
+let node: DeclareNode | undefined;
 
 const oscs = [2, 4, 5, 6, 8].map(n => osc(c(110 * n), 'square'));
 const trigger = new EventSource<boolean>();

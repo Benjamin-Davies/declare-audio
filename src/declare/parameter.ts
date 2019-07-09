@@ -1,4 +1,4 @@
-import { EventSource } from "./events";
+import { EventSource } from './events';
 
 export interface Param {
   bind(param: AudioParam);

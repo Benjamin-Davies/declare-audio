@@ -1,6 +1,6 @@
 import { DeclareNode, NodeBuilder } from './nodes';
 
-let contextCache: AudioContext | undefined = undefined;
+let contextCache: AudioContext | undefined;
 
 export function getContext(): AudioContext {
   if (typeof contextCache === 'undefined') {
