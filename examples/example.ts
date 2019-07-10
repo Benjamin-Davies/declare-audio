@@ -3,8 +3,8 @@ import $ from 'jquery';
 import { getContext, play } from '../src/declare/core';
 import { adsrEnvelope } from '../src/declare/envelope';
 import { EventSource } from '../src/declare/events';
-import { DeclareNode, filter, gain, osc } from '../src/declare/nodes';
-import { constant as c } from '../src/declare/parameter';
+import { DeclareNode, filter, gain, osc } from '../src/declare/node';
+import { constant as c } from '../src/declare/param';
 
 const ctx = getContext();
 let node: DeclareNode | undefined;

@@ -1,5 +1,5 @@
 import { Event, EventSource } from './events';
-import { LinearParam } from './parameter';
+import { LinearParam } from './param';
 
 export function adsrEnvelope(
   attack: number,
