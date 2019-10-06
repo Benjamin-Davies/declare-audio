@@ -1,6 +1,10 @@
-export { LinearParam } from './linear';
-export { ConstantParam, constant } from './constant';
+export { linear } from './linear';
+export { constant } from './constant';
 
 export interface Param {
-  bind(param: AudioParam);
+  attach(param: AudioParam): ParamAttachment;
+}
+
+export interface ParamAttachment {
+  detach(): void;
 }
