@@ -1,5 +1,3 @@
-import { EventSource } from '../events';
-
 export { filter } from './filter';
 export { gain } from './gain';
 export { osc } from './oscillator';

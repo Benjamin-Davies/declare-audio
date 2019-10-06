@@ -1,4 +1,4 @@
-import { DeclareNode, NodeBuilder } from './nodes';
+import { DeclareNode, NodeBuilder } from './node';
 
 let contextCache: AudioContext | undefined;
 

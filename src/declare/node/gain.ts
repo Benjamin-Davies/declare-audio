@@ -1,15 +1,15 @@
-import { Param } from '../parameter';
+import { Param, ParamAttachment } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Gain implements DeclareNode {
   public node: GainNode;
-  private unbindG: () => void;
+  private gainAtt: ParamAttachment;
   private children: DeclareNode[] = [];
 
   // tslint:disable-next-line: no-shadowed-variable
   constructor(ctx: AudioContext, gain: Param, children: Array<NodeBuilder<DeclareNode>>) {
     this.node = ctx.createGain();
-    this.unbindG = gain.bind(this.node.gain);
+    this.gainAtt = gain.attach(this.node.gain);
 
     for (const c of children) {
       const child = c(ctx);
@@ -19,7 +19,7 @@ export class Gain implements DeclareNode {
   }
 
   public destroy() {
-    this.unbindG();
+    this.gainAtt.detach();
 
     for (const child of this.children) {
       child.node.disconnect(this.node);

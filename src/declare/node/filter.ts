@@ -1,10 +1,10 @@
-import { Param } from '../parameter';
+import { Param, ParamAttachment } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Filter implements DeclareNode {
   public node: BiquadFilterNode;
-  private unbindF: () => void;
-  private unbindG: () => void;
+  private freqAtt: ParamAttachment;
+  private gainAtt: ParamAttachment;
   private children: DeclareNode[] = [];
 
   constructor(
@@ -15,8 +15,8 @@ export class Filter implements DeclareNode {
     children: Array<NodeBuilder<DeclareNode>>
   ) {
     this.node = ctx.createBiquadFilter();
-    this.unbindF = frequency.bind(this.node.frequency);
-    this.unbindG = gain.bind(this.node.gain);
+    this.freqAtt = frequency.attach(this.node.frequency);
+    this.gainAtt = gain.attach(this.node.gain);
     this.node.type = type;
 
     for(const c of children) {
@@ -27,8 +27,8 @@ export class Filter implements DeclareNode {
   }
 
   public destroy() {
-    this.unbindF();
-    this.unbindG();
+    this.freqAtt.detach();
+    this.gainAtt.detach();
 
     for (const child of this.children) {
       child.node.disconnect(this.node);

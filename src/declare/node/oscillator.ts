@@ -1,19 +1,19 @@
-import { Param } from '../parameter';
+import { Param, ParamAttachment } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Osc implements DeclareNode {
   public node: OscillatorNode;
-  private unbindF: () => void;
+  private freqAtt: ParamAttachment;
 
   constructor(ctx: AudioContext, frequency: Param, type: OscillatorType) {
     this.node = ctx.createOscillator();
-    this.unbindF = frequency.bind(this.node.frequency);
+    this.freqAtt = frequency.attach(this.node.frequency);
     this.node.type = type;
     this.node.start();
   }
 
   public destroy() {
-    this.unbindF();
+    this.freqAtt.detach();
   }
 }
 
