@@ -19,5 +19,8 @@
     "parcel": "^1.12.3",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
+  },
+  "dependencies": {
+    "rxjs": "^6.5.3"
   }
 }
