@@ -1,29 +1,32 @@
-import { Event, EventSource } from './events';
-import { LinearParam } from './param';
+import { Observable, of } from 'rxjs';
+import { merge, switchMap } from 'rxjs/operators';
+
+import { BoolAudioEvent, ValueAudioEvent } from './events';
+import { linear, Param } from './param';
 
 export function adsrEnvelope(
   attack: number,
   decay: number,
   sustain: number,
   release: number,
-  trigger: EventSource<boolean>
-): LinearParam {
-  return new LinearParam(trigger
-    .mapMerge((time, down) => {
-      const events: Array<Event<number>> = [];
-      let t = time;
-      if (down) {
-        events.push([t, 0]);
-        t += attack;
-        events.push([t, 1]);
-        t += decay;
-        events.push([t, sustain]);
+  trigger: Observable<BoolAudioEvent>
+): Param {
+  return linear(trigger.pipe(
+    switchMap(({ time, on }) => {
+      const events: ValueAudioEvent[] = [];
+      if (on) {
+        events.push({ time, value: 0 });
+        time += attack;
+        events.push({ time, value: 1 });
+        time += decay;
+        events.push({ time, value: sustain });
       } else {
-        events.push([t, sustain]);
-        t += release;
-        events.push([t, 0]);
+        events.push({ time, value: sustain });
+        time += release;
+        events.push({ time, value: 0 });
       }
       return events;
-    })
-    .trigger(0, 0));
+    }),
+    merge(of({ time: 0, value: 0 }))
+    ));
 }

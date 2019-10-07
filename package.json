@@ -15,12 +15,12 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jquery": "^3.3.29",
-    "jquery": "^3.4.0",
     "parcel": "^1.12.3",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   },
   "dependencies": {
+    "jquery": "^3.4.1",
     "rxjs": "^6.5.3"
   }
 }

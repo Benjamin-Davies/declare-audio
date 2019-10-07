@@ -1,28 +1,31 @@
-import $ from 'jquery';
+import { fromEvent, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { getContext, play } from '../src/declare/core';
 import { adsrEnvelope } from '../src/declare/envelope';
-import { EventSource } from '../src/declare/events';
 import { DeclareNode, filter, gain, osc } from '../src/declare/node';
 import { constant as c } from '../src/declare/param';
 
 const ctx = getContext();
 let node: DeclareNode | undefined;
 
-const oscs = [2, 4, 5, 6, 8].map(n => osc(c(110 * n), 'square'));
-const trigger = new EventSource<boolean>();
+const startBtn = document.getElementById('start');
+const playBtn = document.getElementById('play');
+
+fromEvent(startBtn, 'click').subscribe(() => {
+  if (!node) {
+    node = play(demo);
+  }
+});
+
+const oscs = [2, 4, 5, 6, 8].map(n => gain(c(0.2), osc(c(110 * n), 'square')));
+const trigger = merge(
+  fromEvent(playBtn, 'mousedown')
+    .pipe(map(() => ({ time: ctx.currentTime, on: true }))),
+  fromEvent(playBtn, 'mouseup')
+    .pipe(map(() => ({ time: ctx.currentTime, on: false }))),
+);
 const demo = gain(
-  adsrEnvelope(0.05, 0.1, 0.5, 0.2, trigger),
+  adsrEnvelope(0.05, 0.5, 0.7, 0.2, trigger),
   filter(c(500), c(1), 'lowpass', ...oscs)
 );
-
-$('#play')
-  .mousedown(() => {
-    if (!node) {
-      node = play(demo);
-    }
-    trigger.cancel(0).trigger(ctx.currentTime, true);
-  })
-  .mouseup(() => {
-    trigger.cancel(0).trigger(ctx.currentTime, false);
-  });
