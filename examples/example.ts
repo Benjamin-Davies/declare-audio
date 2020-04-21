@@ -11,6 +11,9 @@ let node: DeclareNode | undefined;
 
 const startBtn = document.getElementById('start');
 const playBtn = document.getElementById('play');
+if (!startBtn || !playBtn) {
+  throw 'Could not find expected buttons';
+}
 
 fromEvent(startBtn, 'click').subscribe(() => {
   if (!node) {
