@@ -8,8 +8,9 @@
   },
   "main": "src/declare/",
   "scripts": {
-    "start": "parcel examples/index.html",
-    "lint": "tslint -c tslint.json src/**/*.ts examples/**/*.ts --fix"
+    "examples": "parcel serve examples/index.html --open",
+    "lint": "tslint -c tslint.json src/**/*.ts examples/**/*.ts --fix",
+    "typecheck": "tsc -w"
   },
   "author": "Benjamin Davies",
   "license": "MIT",
