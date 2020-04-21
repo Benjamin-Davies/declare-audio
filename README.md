@@ -4,7 +4,7 @@ A declarative API for sound in the browser
 
 ## Roadmap
 
-This project is currently in alpha. At the moment it is just an on-going experiment for me. If someone expresses interest in using this library in a product, then I will consider releasing it. Keep in mind that you can just fork the repo and probably end up with something much better than me.
+This project is currently in alpha. At the moment it is just an on-going experiment for me. **Expect breaking changes!** If someone expresses interest in using this library in a product, then I will consider releasing it. Keep in mind that you can just fork the repo and probably end up with something much better than me.
 
 ## Library Design
 
