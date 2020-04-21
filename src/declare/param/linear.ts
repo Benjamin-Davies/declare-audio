@@ -4,7 +4,7 @@ import { Param } from '.';
 import { ValueAudioEvent } from '../events';
 
 export const linear = (source: Observable<ValueAudioEvent>) => ({
-  attach(param: AudioParam) {
+  subscribe(param: AudioParam) {
     let t = 0;
     const subscription = source.subscribe({
       next({ time, value }) {
@@ -16,10 +16,6 @@ export const linear = (source: Observable<ValueAudioEvent>) => ({
         t = time;
       }
     });
-    return {
-      detach() {
-        subscription.unsubscribe();
-      }
-    };
+    return subscription;
   }
 } as Param);
