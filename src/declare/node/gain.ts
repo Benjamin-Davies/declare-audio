@@ -8,10 +8,9 @@ export class Gain implements DeclareNode {
   private gainSub: SubscriptionLike;
   private children: DeclareNode[] = [];
 
-  // tslint:disable-next-line: no-shadowed-variable
-  constructor(ctx: AudioContext, gain: Param, children: Array<NodeBuilder<DeclareNode>>) {
+  constructor(ctx: AudioContext, gainValue: Param, children: Array<NodeBuilder<DeclareNode>>) {
     this.node = ctx.createGain();
-    this.gainSub = gain.subscribe(this.node.gain);
+    this.gainSub = gainValue.subscribe(this.node.gain);
 
     for (const c of children) {
       const child = c(ctx);
@@ -30,7 +29,6 @@ export class Gain implements DeclareNode {
   }
 }
 
-// tslint:disable-next-line: no-shadowed-variable
-export function gain(gain: Param, ...children: Array<NodeBuilder<DeclareNode>>): NodeBuilder<Gain> {
-  return ctx => new Gain(ctx, gain, children);
+export function gain(gainValue: Param, ...children: Array<NodeBuilder<DeclareNode>>): NodeBuilder<Gain> {
+  return ctx => new Gain(ctx, gainValue, children);
 }
