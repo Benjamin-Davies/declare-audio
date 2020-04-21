@@ -1,10 +1,12 @@
-import { Param, ParamAttachment } from '../param';
+import { SubscriptionLike } from 'rxjs';
+
+import { Param } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Filter implements DeclareNode {
   public node: BiquadFilterNode;
-  private freqAtt: ParamAttachment;
-  private gainAtt: ParamAttachment;
+  private freqSub: SubscriptionLike;
+  private gainSub: SubscriptionLike;
   private children: DeclareNode[] = [];
 
   constructor(
@@ -15,8 +17,8 @@ export class Filter implements DeclareNode {
     children: Array<NodeBuilder<DeclareNode>>
   ) {
     this.node = ctx.createBiquadFilter();
-    this.freqAtt = frequency.attach(this.node.frequency);
-    this.gainAtt = gain.attach(this.node.gain);
+    this.freqSub = frequency.subscribe(this.node.frequency);
+    this.gainSub = gain.subscribe(this.node.gain);
     this.node.type = type;
 
     for(const c of children) {
@@ -27,8 +29,8 @@ export class Filter implements DeclareNode {
   }
 
   public destroy() {
-    this.freqAtt.detach();
-    this.gainAtt.detach();
+    this.freqSub.unsubscribe();
+    this.gainSub.unsubscribe();
 
     for (const child of this.children) {
       child.node.disconnect(this.node);

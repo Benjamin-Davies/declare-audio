@@ -1,19 +1,21 @@
-import { Param, ParamAttachment } from '../param';
+import { SubscriptionLike } from 'rxjs';
+
+import { Param } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Osc implements DeclareNode {
   public node: OscillatorNode;
-  private freqAtt: ParamAttachment;
+  private freqSub: SubscriptionLike;
 
   constructor(ctx: AudioContext, frequency: Param, type: OscillatorType) {
     this.node = ctx.createOscillator();
-    this.freqAtt = frequency.attach(this.node.frequency);
+    this.freqSub = frequency.subscribe(this.node.frequency);
     this.node.type = type;
     this.node.start();
   }
 
   public destroy() {
-    this.freqAtt.detach();
+    this.freqSub.unsubscribe();
   }
 }
 

@@ -1,15 +1,17 @@
-import { Param, ParamAttachment } from '../param';
+import { SubscriptionLike } from 'rxjs';
+
+import { Param } from '../param';
 import { DeclareNode, NodeBuilder } from '.';
 
 export class Gain implements DeclareNode {
   public node: GainNode;
-  private gainAtt: ParamAttachment;
+  private gainSub: SubscriptionLike;
   private children: DeclareNode[] = [];
 
   // tslint:disable-next-line: no-shadowed-variable
   constructor(ctx: AudioContext, gain: Param, children: Array<NodeBuilder<DeclareNode>>) {
     this.node = ctx.createGain();
-    this.gainAtt = gain.attach(this.node.gain);
+    this.gainSub = gain.subscribe(this.node.gain);
 
     for (const c of children) {
       const child = c(ctx);
@@ -19,7 +21,7 @@ export class Gain implements DeclareNode {
   }
 
   public destroy() {
-    this.gainAtt.detach();
+    this.gainSub.unsubscribe();
 
     for (const child of this.children) {
       child.node.disconnect(this.node);
