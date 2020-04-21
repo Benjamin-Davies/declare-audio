@@ -1,11 +1,5 @@
-import { Param } from '.';
+import { of } from 'rxjs';
 
-export const constant = (value: number) => ({
-  attach(param) {
-    param.value = value;
-    return {
-      // tslint:disable-next-line:no-empty
-      detach() { }
-    };
-  }
-} as Param);
+import { linear } from './linear';
+
+export const constant = (value: number) => linear(of({ time: 0, value }));
