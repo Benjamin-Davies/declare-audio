@@ -2,6 +2,10 @@
 
 A declarative API for sound in the browser
 
+## Roadmap
+
+This project is currently in alpha. At the moment it is just an on-going experiment for me. If someone expresses interest in using this library in a product, then I will consider releasing it. Keep in mind that you can just fork the repo and probably end up with something much better than me.
+
 ## Library Design
 
 Everything in this library must first have its structure defined. These structure objects *vaguely* follow the builder pattern. They are implemented as classes, but each has a simple function to generate them as this is less 'noisy'.
@@ -10,10 +14,4 @@ In the case of node structures, the objects have a builder method, that given an
 
 ## Code style
 
-Code style is enforced by TSLint. `// tslint:disable-next-line` comments are allowed, but they must use a single line comment, (one with the double forward slash) be as specific as possible, and have a justified reason (for instance an empty callback).
-
-```javascript
-// This function can be empty because we don't need to unbind anything
-// tslint:disable-next-line:no-empty
-return () => {};
-```
+Code style is enforced by TSLint.
