@@ -9,6 +9,10 @@ export function getContext(): AudioContext {
   return contextCache;
 }
 
+export function resumeContext() {
+  contextCache?.resume();
+}
+
 export function play(builder: NodeBuilder<DeclareNode>): DeclareNode {
   const ctx = getContext();
   const node = builder(ctx);

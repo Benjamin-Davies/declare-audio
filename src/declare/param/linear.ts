@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { Param } from '.';
+import { resumeContext } from '../core';
 import { ValueAudioEvent } from '../events';
 
 export const linear = (source: Observable<ValueAudioEvent>) => ({
@@ -12,6 +13,7 @@ export const linear = (source: Observable<ValueAudioEvent>) => ({
         if (time < t)
           param.cancelAndHoldAtTime(time);
 
+        resumeContext();
         param.linearRampToValueAtTime(value, time);
         t = time;
       }
