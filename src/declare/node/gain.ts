@@ -1,31 +1,12 @@
-import { SubscriptionLike } from 'rxjs';
-
 import { Param } from '../param';
-import { DeclareNode, NodeBuilder } from '.';
+import { BaseDeclareNode, DeclareNode, NodeBuilder } from '.';
 
-export class Gain implements DeclareNode {
-  public node: GainNode;
-  private gainSub: SubscriptionLike;
-  private children: DeclareNode[] = [];
-
+export class Gain extends BaseDeclareNode<GainNode> {
   constructor(ctx: AudioContext, gainValue: Param, children: Array<NodeBuilder<DeclareNode>>) {
-    this.node = ctx.createGain();
-    this.gainSub = gainValue.subscribe(this.node.gain);
+    const node = ctx.createGain();
+    const gainSub = gainValue.subscribe(node.gain);
 
-    for (const c of children) {
-      const child = c(ctx);
-      this.children.push(child);
-      child.node.connect(this.node);
-    }
-  }
-
-  public destroy() {
-    this.gainSub.unsubscribe();
-
-    for (const child of this.children) {
-      child.node.disconnect(this.node);
-      child.destroy();
-    }
+    super(ctx, node, children, [gainSub]);
   }
 }
 

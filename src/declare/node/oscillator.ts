@@ -1,21 +1,14 @@
-import { SubscriptionLike } from 'rxjs';
-
 import { Param } from '../param';
-import { DeclareNode, NodeBuilder } from '.';
+import { BaseDeclareNode, NodeBuilder } from '.';
 
-export class Osc implements DeclareNode {
-  public node: OscillatorNode;
-  private freqSub: SubscriptionLike;
-
+export class Osc extends BaseDeclareNode<OscillatorNode> {
   constructor(ctx: AudioContext, frequency: Param, type: OscillatorType) {
-    this.node = ctx.createOscillator();
-    this.freqSub = frequency.subscribe(this.node.frequency);
-    this.node.type = type;
-    this.node.start();
-  }
+    const node = ctx.createOscillator();
+    const freqSub = frequency.subscribe(node.frequency);
+    node.type = type;
+    node.start();
 
-  public destroy() {
-    this.freqSub.unsubscribe();
+    super(ctx, node, [], [freqSub]);
   }
 }
 

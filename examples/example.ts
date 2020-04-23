@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 
 import { getContext, play } from '../src/declare/core';
 import { adsrEnvelope } from '../src/declare/envelope';
-import { filter, gain, osc } from '../src/declare/node';
+import { biquadFilter, gain, osc } from '../src/declare/node';
 import { constant as c } from '../src/declare/param';
 
 const ctx = getContext();
@@ -22,7 +22,7 @@ const trigger = merge(
 );
 const demo = gain(
   adsrEnvelope(0.05, 0.5, 0.7, 0.2, trigger),
-  filter(c(500), c(1), 'lowpass', ...oscs)
+  biquadFilter(c(500), c(1), 'lowpass', ...oscs)
 );
 
 play(demo);

@@ -1,14 +1,7 @@
-import { SubscriptionLike } from 'rxjs';
-
 import { Param } from '../param';
-import { DeclareNode, NodeBuilder } from '.';
+import { BaseDeclareNode, DeclareNode, NodeBuilder } from '.';
 
-export class Filter implements DeclareNode {
-  public node: BiquadFilterNode;
-  private freqSub: SubscriptionLike;
-  private gainSub: SubscriptionLike;
-  private children: DeclareNode[] = [];
-
+export class BiquadFilter extends BaseDeclareNode<BiquadFilterNode> {
   constructor(
     ctx: AudioContext,
     frequency: Param,
@@ -16,34 +9,20 @@ export class Filter implements DeclareNode {
     type: BiquadFilterType,
     children: Array<NodeBuilder<DeclareNode>>
   ) {
-    this.node = ctx.createBiquadFilter();
-    this.freqSub = frequency.subscribe(this.node.frequency);
-    this.gainSub = gain.subscribe(this.node.gain);
-    this.node.type = type;
+    const node = ctx.createBiquadFilter();
+    const freqSub = frequency.subscribe(node.frequency);
+    const gainSub = gain.subscribe(node.gain);
+    node.type = type;
 
-    for(const c of children) {
-      const child = c(ctx);
-      this.children.push(child);
-      child.node.connect(this.node);
-    }
-  }
-
-  public destroy() {
-    this.freqSub.unsubscribe();
-    this.gainSub.unsubscribe();
-
-    for (const child of this.children) {
-      child.node.disconnect(this.node);
-      child.destroy();
-    }
+    super(ctx, node, children, [freqSub, gainSub])
   }
 }
 
-export function filter(
+export function biquadFilter(
   frequency: Param,
   gain: Param,
   type: BiquadFilterType,
   ...children: Array<NodeBuilder<DeclareNode>>
-): NodeBuilder<Filter> {
-  return ctx => new Filter(ctx, frequency, gain, type, children);
+): NodeBuilder<BiquadFilter> {
+  return ctx => new BiquadFilter(ctx, frequency, gain, type, children);
 }
